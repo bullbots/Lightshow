@@ -116,10 +116,12 @@ void bounce()
 void rainbow() 
 {
   int color = 0;
+  int leingth = NUM_LEDS;
   uint8_t hue = 121;
 //  FastLED.clear();
   for ( int i = 0; i < 1000; i++ ) {
     // FastLED's built-in rainbow generator
+    leingth = NUM_LEDS - random8(15);
     for (int a = 0; a < NUM_LEDS; a++){
       leds[a] = CHSV(hue, 255, 192);
       color += 7;
