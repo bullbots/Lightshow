@@ -40,8 +40,8 @@ void setup() {
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
 //SimplePatternList gPatterns = { rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm };
-//SimplePatternList gPatterns = { bounce, rainbow, Rows, confetti, chase, sinelon };
-SimplePatternList gPatterns = { rainbow };
+//SimplePatternList gPatterns = { bounce, blueRainbow, Rows, confetti, chase, sinelon };
+SimplePatternList gPatterns = { swap };
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -113,39 +113,140 @@ void bounce()
   FastLED.clear();
   delay(0);
 }
-void rainbow() 
+void blueRainbow() 
 {
-  int color = 0;
   int leingth = NUM_LEDS;
-  uint8_t hue = 121;
+  int BOTTOM_HUE = 90;
+  int TOP_HUE = 171;
+  uint8_t baseHue = BOTTOM_HUE;
+  int direction = 1;      // up
 //  FastLED.clear();
   for ( int i = 0; i < 1000; i++ ) {
-    // FastLED's built-in rainbow generator
+    int color = baseHue;
+    int colorDirection = direction;
     leingth = NUM_LEDS - random8(15);
     for (int a = 0; a < NUM_LEDS; a++){
-      leds[a] = CHSV(hue, 255, 192);
-      color += 7;
-      if (hue+color > 300){
-        color = 0;
+      // convert the hue to RGB to get into the led array
+      CHSV hsv( color, 255, 255); 
+      CRGB rgb;
+      hsv2rgb_rainbow( hsv, rgb);
+  
+      leds[a] = rgb;
+      color += 4 * colorDirection;
+      if (color > TOP_HUE){
+        colorDirection = -1;      // change direction
+      } else if ( color < BOTTOM_HUE) {
+        colorDirection = 1;
       }
     }
     FastLED.show();
     delay(30);
-    hue ++;
-    if (hue > 300){
-      hue = 121;
+    baseHue += direction;
+    if (baseHue > TOP_HUE){
+      direction = -1;
+    } else if ( baseHue < BOTTOM_HUE ) {
+      direction = 1;
     }
   }
   FastLED.clear();
 
-  delay(0);
+  delay(1000);    // debugging - 1000; normal - 0
+  
+}
+
+// Half is blue, half is green, swap.
+void swap() 
+{
+//  FastLED.clear();
+  int gColor;
+  int bColor;
+  for ( int i = 0; i < 20; i++ ) {
+    if ( i % 2 == 0 ) {
+      for (int a = 0; a < NUM_LEDS; a++){
+        if ( a < (NUM_LEDS / 2) ) {
+          gColor = 255;
+          bColor = 0;
+        } else {
+          gColor = 0;
+          bColor = 255;
+        }
+    
+        leds[a] = CRGB( 0, gColor, bColor );
+      }
+    } else {
+      for (int a = 0; a < NUM_LEDS; a++){
+        if ( a < (NUM_LEDS / 2) ) {
+          gColor = 0;
+          bColor = 255;
+        } else {
+          gColor = 255;
+          bColor = 0;
+        }
+    
+        leds[a] = CRGB( 0, gColor, bColor );
+      }
+    }
+
+    FastLED.show();
+    // speed up over time
+    delay(500 - i * 20);
+  }
+  FastLED.clear();
+
+  delay(0);    // debugging - 1000; normal - 0
+  
+}
+
+// Red White and Blue.
+void RWB() 
+{
+//  FastLED.clear();
+  for ( int i = 0; i < NUM_LEDS; i++ ) {
+    switch (i) {
+      case 0:
+      case 1:
+      case 2
+    }
+    if ( i % 2 == 0 ) {
+      for (int a = 0; a < NUM_LEDS; a++){
+        if ( a < (NUM_LEDS / 2) ) {
+          gColor = 255;
+          bColor = 0;
+        } else {
+          gColor = 0;
+          bColor = 255;
+        }
+    
+        leds[a] = CRGB( 0, gColor, bColor );
+      }
+    } else {
+      for (int a = 0; a < NUM_LEDS; a++){
+        if ( a < (NUM_LEDS / 2) ) {
+          gColor = 0;
+          bColor = 255;
+        } else {
+          gColor = 255;
+          bColor = 0;
+        }
+    
+        leds[a] = CRGB( 0, gColor, bColor );
+      }
+    }
+
+    FastLED.show();
+    // speed up over time
+    delay(500 - i * 20);
+  }
+  FastLED.clear();
+
+  delay(0);    // debugging - 1000; normal - 0
   
 }
 
 void rainbowWithGlitter() 
 {
   // built-in FastLED rainbow, plus some random sparkly glitter
-  rainbow();
+  blueRainbow();
   addGlitter(80);
 }
 
