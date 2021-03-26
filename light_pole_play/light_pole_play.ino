@@ -22,8 +22,8 @@ FASTLED_USING_NAMESPACE
 #define NUM_LEDS    90
 CRGB leds[NUM_LEDS];
 
-#define BRIGHTNESS          999
-#define FRAMES_PER_SECOND  120
+#define BRIGHTNESS 999
+#define FRAMES_PER_SECOND 120
 
 void setup() {
   delay(3000); // 3 second delay for recovery
@@ -150,16 +150,15 @@ void blueRainbow()
   }
   FastLED.clear();
 
-  delay(1000);    // debugging - 1000; normal - 0
+  delay(0);    // debugging - 1000; normal - 0
   
 }
-
+int gColor;
+int bColor;
 // Half is blue, half is green, swap.
 void swap() 
 {
 //  FastLED.clear();
-  int gColor;
-  int bColor;
   for ( int i = 0; i < 20; i++ ) {
     if ( i % 2 == 0 ) {
       for (int a = 0; a < NUM_LEDS; a++){
@@ -200,13 +199,14 @@ void swap()
 // Red White and Blue.
 void RWB() 
 {
-//  FastLED.clear();
+  FastLED.clear();
   for ( int i = 0; i < NUM_LEDS; i++ ) {
-    switch (i) {
-      case 0:
-      case 1:
-      case 2
-    }
+//    switch (i) {
+//      case 0:
+//      case 1:
+//      case 2:
+//    }
+
     if ( i % 2 == 0 ) {
       for (int a = 0; a < NUM_LEDS; a++){
         if ( a < (NUM_LEDS / 2) ) {
@@ -235,7 +235,7 @@ void RWB()
 
     FastLED.show();
     // speed up over time
-    delay(500 - i * 20);
+    delay(500 - (i * 20));
   }
   FastLED.clear();
 
@@ -383,5 +383,3 @@ void Rows(){
     // insert a delay to keep the framerate modest
  }
  */
-
-
